@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <p>Count numbers: {{ counter }}</p>
-        <button onclick="startWorker()">Start Worker</button>
-        <button onclick="stopWorker()">Stop Worker</button>
-    </div>
+  <div>
+    <p>Count numbers: {{ counter }}</p>
+    <button @click="startWorker">Start Worker</button>
+    <button @click="stopWorker">Stop Worker</button>
+  </div>
 </template>
 
 <script>
@@ -18,23 +18,24 @@ export default {
   },
   methods: {
     startWorker: function () {
-      console.log('start worker')
+      console.log('start Worker')
+      var component = this
       if (typeof (Worker) !== 'undefined') {
         if (typeof (w) === 'undefined') {
-          w = new Worker('/js/counter.js')
+          w = new Worker('/static/js/counter.js')
         }
         w.onmessage = function (event) {
-          this.counter = event.data
+          component.counter = event.data
         }
       } else {
         document.getElementById('result').innerHTML = 'Sorry! No Web Worker support.'
       }
+    },
+    stopWorker: function () {
+      console.log('stop Worker')
+      w.terminate()
+      w = undefined
     }
-  },
-  stopWorker: function () {
-    console.log('stop worker')
-    w.terminate()
-    w = undefined
   }
 }
 </script>
